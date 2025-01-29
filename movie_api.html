@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All About Movie </title>
+    <style>
+     * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #121212;
+    color: #fff;
+    text-align: center;
+}
+
+h1 {
+    background: linear-gradient(90deg, #6a11cb, #2575fc);
+    color: #fff;
+    padding: 20px;
+    font-size: 32px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.container {
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+input {
+    width: 300px;
+    padding: 12px;
+    font-size: 16px;
+    border: 2px solid #6a11cb;
+    border-radius: 25px;
+    background: #222;
+    color: #fff;
+    outline: none;
+}
+
+button {
+    background: linear-gradient(90deg, #ff416c, #ff4b2b);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.1);
+    background: linear-gradient(90deg, #ff4b2b, #ff416c);
+}
+
+#main {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.movie-card {
+    background: #222;
+    border-radius: 10px;
+    padding: 20px;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+    text-align: center;
+    margin-top: 20px;
+}
+
+.movie-card img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.movie-card h4 {
+    font-size: 22px;
+    margin: 10px 0;
+    color: #ff4b2b;
+}
+
+.movie-card p {
+    font-size: 14px;
+    color: #ccc;
+    margin-top: 5px;
+}
+
+
+    </style>
+</head>
+
+<body>
+    <h1>Movie Database</h1>
+
+    <div class="container">
+        <input  type="text" id="movieinput">
+        <button id="searchbtn" >Search</button>
+    </div>
+    <div id="main"></div>
+
+
+
+</body>
+
+</html>
+<script>
+    let main = document.getElementById("main")
+    let searchbtn = document.getElementById("searchbtn")
+    let movieinput = document.getElementById("movieinput")
+
+    searchbtn.addEventListener("click", () => {
+        var moviename = movieinput.value.trim()
+        call_fetch(moviename)
+
+        // ###################################################################################################
+        // #NOTE  it's still looking complicated that's why we use now async and await keywords for simplier and maintainable code
+        
+        // fetch(`http://www.omdbapi.com/?apikey=7af09fc7&t=${moviename}`)
+        //     .then((response) => {
+        //         return response.json()
+        //     })
+        //     .then((data) => {
+        //         displaydata(data)
+        //     }).catch((error) => {
+        //         console.log(error)
+        //     })
+        // #################################################################################################
+    })
+
+
+    const call_fetch= async(moviename)=>{
+        try {
+            let response = await fetch(`http://www.omdbapi.com/?apikey=7af09fc7&t=${moviename}`)
+            let data = await response.json()
+            displaydata(data)   
+        }catch (error) {
+            console.log(error)
+        }
+
+
+    }
+    const displaydata = (print) => {
+    main.innerHTML = '';
+    
+    let div = document.createElement("div");
+    div.classList.add("movie-card"); // Apply the new CSS class
+
+    let poster = document.createElement("img");
+    let title = document.createElement("h4");
+    let plot = document.createElement("p");
+    let type = document.createElement("p");
+
+    poster.src = print.Poster;
+    title.innerHTML = `🎬 ${print.Title}`;
+    plot.innerText = `📖 Plot: ${print.Plot}`;
+    type.innerText = `🎞️ Type: ${print.Type}`;
+
+    div.append(poster, title, type, plot);
+    main.append(div);
+};
+
+</script>
